@@ -29,3 +29,34 @@ jobs:
       - name: Testes e cobertura
         working-directory: backend
         run: npm run test:coverage
+
+  sonarcloud:
+    name: Análise estática — SonarCloud
+    runs-on: ubuntu-latest
+    needs: backend
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Configurar Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: 'npm'
+          cache-dependency-path: backend/package-lock.json
+
+      - name: Instalar dependências
+        working-directory: backend
+        run: npm ci
+
+      - name: Gerar cobertura
+        working-directory: backend
+        run: npm run test:coverage
+
+      - name: Análise SonarCloud
+        uses: SonarSource/sonarqube-scan-action@v4
+        env:
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
