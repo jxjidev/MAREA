@@ -1,7 +1,7 @@
 const MINUTOS_POR_DIA = 24 * 60;
 const FORMATO_HORARIO = /^([01]\d|2[0-3]):([0-5]\d)$/;
 
-function paraMinutos(horario) {
+export function paraMinutos(horario) {
   const partes = FORMATO_HORARIO.exec(horario);
 
   if (partes === null) {
