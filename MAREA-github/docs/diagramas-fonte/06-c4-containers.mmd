@@ -1,0 +1,28 @@
+flowchart TD
+    U(["<b>Usuário</b><br/><i>[Pessoa]</i>"])
+
+    subgraph MAREA["Sistema MAREA"]
+        PWA["<b>Aplicação Web (PWA)</b><br/><i>[React + Vite]</i><br/>Interface mobile-first, Service Worker,<br/>cache e fila de sincronização"]
+        LOCAL[("<b>Armazenamento local</b><br/><i>[IndexedDB]</i><br/>Registros offline e<br/>fila de pendências")]
+        API["<b>API</b><br/><i>[Node.js + Express]</i><br/>Regras de negócio, autenticação,<br/>motor de regras"]
+        PDF["<b>Gerador de relatório</b><br/><i>[Biblioteca de PDF]</i><br/>Composição do relatório<br/>mensal com gráficos"]
+        PG[("<b>Banco de dados</b><br/><i>[PostgreSQL]</i><br/>Registros e configurações")]
+    end
+
+    OBS["<b>Observabilidade</b><br/><i>[Prometheus + Grafana]</i>"]
+
+    U -->|"Acessa via HTTPS"| PWA
+    PWA -->|"Lê e grava"| LOCAL
+    PWA -->|"JSON sobre HTTPS"| API
+    API -->|"SQL"| PG
+    API -->|"Solicita geração"| PDF
+    PDF -->|"Retorna o PDF"| PWA
+    API -->|"Expõe métricas"| OBS
+
+    style PWA fill:#1168bd,color:#fff
+    style API fill:#1168bd,color:#fff
+    style PDF fill:#1168bd,color:#fff
+    style PG fill:#1168bd,color:#fff
+    style LOCAL fill:#1168bd,color:#fff
+    style U fill:#08427b,color:#fff
+    style OBS fill:#999,color:#fff

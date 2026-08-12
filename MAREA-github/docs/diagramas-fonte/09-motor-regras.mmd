@@ -1,0 +1,13 @@
+flowchart TD
+    S([Registro persistido]) --> A[Carrega as regras ativas do usuário]
+    A --> B{Há regra a avaliar?}
+    B -->|Não| Z([Fim])
+    B -->|Sim| C[Seleciona a próxima regra]
+    C --> D[Consulta a janela de registros<br/>exigida pela regra]
+    D --> E{Condição satisfeita<br/>para o limiar configurado?}
+    E -->|Não| B
+    E -->|Sim| F{Já houve notificação<br/>desta regra hoje? RN06}
+    F -->|Sim| B
+    F -->|Não| G[Registra a notificação]
+    G --> H[Envia ao usuário]
+    H --> B

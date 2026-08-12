@@ -1,0 +1,26 @@
+flowchart TD
+    S([Início]) --> A[Usuário abre o Dashboard]
+    A --> B[Seleciona a variável a registrar]
+    B --> C[Informa o valor]
+    C --> D{Dados válidos?}
+    D -->|Não| E[Exibe mensagem de validação]
+    E --> C
+    D -->|Sim| F{Já existe registro<br/>para a data?}
+    F -->|Sim, e a regra RN02 se aplica| G[Oferece edição do registro existente]
+    G --> C
+    F -->|Não| H[Persiste no armazenamento local]
+    H --> I{Há conexão?}
+    I -->|Sim| J[Envia à API]
+    I -->|Não| K[Marca como pendente de sincronização]
+    J --> L{Envio bem-sucedido?}
+    L -->|Não| K
+    L -->|Sim| M[Marca como sincronizado]
+    K --> N[Aciona o motor de regras]
+    M --> N
+    N --> O{Algum gatilho<br/>foi satisfeito?}
+    O -->|Não| P[Atualiza o Dashboard]
+    O -->|Sim| Q{Regra já notificada hoje?<br/>RN06}
+    Q -->|Sim| P
+    Q -->|Não| R[Emite notificação]
+    R --> P
+    P --> T([Fim])

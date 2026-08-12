@@ -1,0 +1,18 @@
+flowchart TD
+    U["<b>Usuário</b><br/><i>[Pessoa]</i><br/>Pessoa com Transtorno Bipolar<br/>que registra a própria rotina"]
+    S["<b>MAREA</b><br/><i>[Sistema]</i><br/>Aplicação Web Progressiva de<br/>automonitoramento de rotina"]
+    N["<b>Navegador</b><br/><i>[Sistema externo]</i><br/>Service Worker, armazenamento<br/>local e notificações"]
+    E["<b>Serviço de e-mail</b><br/><i>[Sistema externo]</i><br/>Recuperação de senha"]
+    P["<b>Profissional de saúde</b><br/><i>[Pessoa — fora do sistema]</i><br/>Recebe o relatório mensal"]
+
+    U -->|"Registra sono, hidratação,<br/>medicação e humor"| S
+    S -->|"Devolve notificações,<br/>gráficos e relatório mensal"| U
+    S -->|"Utiliza recursos de"| N
+    S -->|"Envia mensagens<br/>transacionais via"| E
+    U -.->|"Compartilha o relatório<br/>por meio externo"| P
+
+    style S fill:#1168bd,color:#fff
+    style U fill:#08427b,color:#fff
+    style N fill:#999,color:#fff
+    style E fill:#999,color:#fff
+    style P fill:#ccc,color:#000

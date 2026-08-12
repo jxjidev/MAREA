@@ -1,0 +1,21 @@
+flowchart TD
+    A[Acesso pelo navegador] --> B{Possui sessão ativa?}
+    B -->|Não| C[Login]
+    B -->|Sim| D[Dashboard]
+    C --> E{Possui conta?}
+    E -->|Não| F[Cadastro]
+    F --> D
+    E -->|Sim| D
+    D --> G[Registro]
+    D --> H[Histórico e gráficos]
+    D --> I[Relatório mensal]
+    D --> J[Configurações]
+    G --> D
+    H --> D
+    I --> K[Exportar PDF]
+    K --> L[Compartilhar]
+    L --> D
+    J --> M[Regras e limiares]
+    J --> N[Lembretes]
+    M --> D
+    N --> D

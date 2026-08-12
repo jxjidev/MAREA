@@ -1,0 +1,34 @@
+sequenceDiagram
+    actor U as Usuário
+    participant PWA as Aplicação PWA
+    participant SW as Service Worker
+    participant DB as IndexedDB
+    participant API as API (Node/Express)
+    participant PG as PostgreSQL
+
+    U->>PWA: Informa o registro
+    PWA->>PWA: Valida os dados
+    PWA->>DB: Persiste o registro
+    DB-->>PWA: Confirma persistência
+    PWA-->>U: Exibe confirmação imediata
+
+    alt Com conexão
+        PWA->>API: POST /registros
+        API->>API: Autentica e autoriza (RN01)
+        API->>PG: Grava o registro
+        PG-->>API: Confirma gravação
+        API->>API: Executa o motor de regras
+        API-->>PWA: 201 Created + alertas gerados
+        PWA->>DB: Marca como sincronizado
+        PWA-->>U: Exibe notificação, se houver
+    else Sem conexão
+        PWA->>DB: Marca como pendente
+        PWA->>SW: Registra sincronização em segundo plano
+        Note over SW: Aguarda o retorno da conexão
+        SW->>API: POST /registros (fila pendente)
+        API->>PG: Grava os registros
+        PG-->>API: Confirma gravação
+        API-->>SW: 201 Created
+        SW->>DB: Marca como sincronizado
+        SW-->>U: Notifica a sincronização concluída
+    end

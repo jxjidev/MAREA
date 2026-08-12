@@ -1,0 +1,31 @@
+flowchart LR
+    U(("Usuário"))
+    P(("Profissional<br/>de saúde"))
+
+    subgraph MAREA
+        UC01[UC01 Registrar sono]
+        UC02[UC02 Registrar hidratação]
+        UC03[UC03 Registrar medicação]
+        UC04[UC04 Registrar humor]
+        UC05[UC05 Visualizar histórico]
+        UC06[UC06 Receber notificação]
+        UC07[UC07 Configurar regras e lembretes]
+        UC08[UC08 Exportar relatório mensal]
+        UC09[UC09 Utilizar sem conexão]
+        UC10[UC10 Instalar no dispositivo]
+    end
+
+    R[/Relatório em PDF/]
+
+    U --- UC01
+    U --- UC02
+    U --- UC03
+    U --- UC04
+    U --- UC05
+    U --- UC06
+    U --- UC07
+    U --- UC08
+    U --- UC09
+    U --- UC10
+    UC08 --> R
+    R -.compartilhamento externo.-> P

@@ -1,0 +1,78 @@
+erDiagram
+    USUARIO ||--o{ REGISTRO_SONO : possui
+    USUARIO ||--o{ REGISTRO_HIDRATACAO : possui
+    USUARIO ||--o{ REGISTRO_HUMOR : possui
+    USUARIO ||--o{ MEDICAMENTO : cadastra
+    USUARIO ||--o{ REGISTRO_MEDICACAO : possui
+    USUARIO ||--o{ CONFIGURACAO_REGRA : configura
+    USUARIO ||--o{ NOTIFICACAO : recebe
+    USUARIO ||--o{ RELATORIO_MENSAL : gera
+    MEDICAMENTO ||--o{ REGISTRO_MEDICACAO : referencia
+
+    USUARIO {
+        uuid id PK
+        varchar email UK
+        varchar senha_hash
+        timestamp criado_em
+    }
+    REGISTRO_SONO {
+        uuid id PK
+        uuid usuario_id FK
+        date data_referencia
+        time hora_dormir
+        time hora_acordar
+        int duracao_min
+        timestamp atualizado_em
+    }
+    REGISTRO_HIDRATACAO {
+        uuid id PK
+        uuid usuario_id FK
+        date data_referencia
+        int quantidade_ml
+        timestamp atualizado_em
+    }
+    MEDICAMENTO {
+        uuid id PK
+        uuid usuario_id FK
+        varchar nome
+        varchar dose
+        time horario_previsto
+        boolean ativo
+    }
+    REGISTRO_MEDICACAO {
+        uuid id PK
+        uuid usuario_id FK
+        uuid medicamento_id FK
+        date data_referencia
+        boolean tomado
+        time horario
+        timestamp atualizado_em
+    }
+    REGISTRO_HUMOR {
+        uuid id PK
+        uuid usuario_id FK
+        date data_referencia
+        smallint nivel
+        text observacao
+        timestamp atualizado_em
+    }
+    CONFIGURACAO_REGRA {
+        uuid id PK
+        uuid usuario_id FK
+        varchar regra_codigo
+        boolean ativa
+        jsonb limiar
+    }
+    NOTIFICACAO {
+        uuid id PK
+        uuid usuario_id FK
+        varchar regra_codigo
+        timestamp gerada_em
+        boolean lida
+    }
+    RELATORIO_MENSAL {
+        uuid id PK
+        uuid usuario_id FK
+        date mes_referencia
+        timestamp gerado_em
+    }

@@ -1,0 +1,32 @@
+flowchart TD
+    PWA["<b>Aplicação Web (PWA)</b><br/><i>[Container]</i>"]
+
+    subgraph API["Container: API — Node.js + Express"]
+        CTRL["<b>Controladores</b><br/>Recepção HTTP e<br/>validação de entrada"]
+        AUTH["<b>Módulo de autenticação</b><br/>Emissão e verificação<br/>de tokens"]
+        SVC["<b>Serviços de domínio</b><br/>Registro, histórico<br/>e relatório"]
+        MR["<b>Motor de regras</b><br/>Avaliação dos gatilhos<br/>MR01 a MR05"]
+        REPO["<b>Repositórios</b><br/>Acesso a dados,<br/>isolando o ORM"]
+        OBSC["<b>Observabilidade</b><br/>Métricas e<br/>logs estruturados"]
+    end
+
+    PG[("<b>PostgreSQL</b><br/><i>[Container]</i>")]
+
+    PWA -->|"JSON/HTTPS"| CTRL
+    CTRL --> AUTH
+    CTRL --> SVC
+    SVC --> MR
+    SVC --> REPO
+    MR --> REPO
+    REPO -->|"SQL"| PG
+    CTRL --> OBSC
+    SVC --> OBSC
+
+    style CTRL fill:#85bbf0,color:#000
+    style AUTH fill:#85bbf0,color:#000
+    style SVC fill:#85bbf0,color:#000
+    style MR fill:#f5a623,color:#000
+    style REPO fill:#85bbf0,color:#000
+    style OBSC fill:#85bbf0,color:#000
+    style PWA fill:#1168bd,color:#fff
+    style PG fill:#1168bd,color:#fff
