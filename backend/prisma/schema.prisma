@@ -1,0 +1,134 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Usuario {
+  id        String   @id @default(uuid())
+  email     String   @unique
+  senhaHash String   @map("senha_hash")
+  criadoEm  DateTime @default(now()) @map("criado_em")
+
+  registrosSono       RegistroSono[]
+  registrosHidratacao RegistroHidratacao[]
+  registrosHumor      RegistroHumor[]
+  medicamentos        Medicamento[]
+  registrosMedicacao  RegistroMedicacao[]
+  configuracoesRegra  ConfiguracaoRegra[]
+  notificacoes        Notificacao[]
+  relatoriosMensais   RelatorioMensal[]
+
+  @@map("usuario")
+}
+
+model RegistroSono {
+  id             String   @id @default(uuid())
+  usuarioId      String   @map("usuario_id")
+  dataReferencia DateTime @map("data_referencia") @db.Date
+  horaDormir     String   @map("hora_dormir")
+  horaAcordar    String   @map("hora_acordar")
+  duracaoMin     Int      @map("duracao_min")
+  atualizadoEm   DateTime @updatedAt @map("atualizado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, dataReferencia])
+  @@map("registro_sono")
+}
+
+model RegistroHidratacao {
+  id             String   @id @default(uuid())
+  usuarioId      String   @map("usuario_id")
+  dataReferencia DateTime @map("data_referencia") @db.Date
+  quantidadeMl   Int      @map("quantidade_ml")
+  atualizadoEm   DateTime @updatedAt @map("atualizado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, dataReferencia])
+  @@map("registro_hidratacao")
+}
+
+model Medicamento {
+  id              String  @id @default(uuid())
+  usuarioId       String  @map("usuario_id")
+  nome            String
+  dose            String
+  horarioPrevisto String  @map("horario_previsto")
+  ativo           Boolean @default(true)
+
+  usuario  Usuario             @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  registros RegistroMedicacao[]
+
+  @@map("medicamento")
+}
+
+model RegistroMedicacao {
+  id             String   @id @default(uuid())
+  usuarioId      String   @map("usuario_id")
+  medicamentoId  String   @map("medicamento_id")
+  dataReferencia DateTime @map("data_referencia") @db.Date
+  tomado         Boolean
+  horario        String?
+  atualizadoEm   DateTime @updatedAt @map("atualizado_em")
+
+  usuario     Usuario     @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+  medicamento Medicamento @relation(fields: [medicamentoId], references: [id], onDelete: Cascade)
+
+  @@unique([medicamentoId, dataReferencia])
+  @@map("registro_medicacao")
+}
+
+model RegistroHumor {
+  id             String   @id @default(uuid())
+  usuarioId      String   @map("usuario_id")
+  dataReferencia DateTime @map("data_referencia") @db.Date
+  nivel          Int      @db.SmallInt
+  observacao     String?
+  atualizadoEm   DateTime @updatedAt @map("atualizado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, dataReferencia])
+  @@map("registro_humor")
+}
+
+model ConfiguracaoRegra {
+  id           String  @id @default(uuid())
+  usuarioId    String  @map("usuario_id")
+  regraCodigo  String  @map("regra_codigo")
+  ativa        Boolean @default(true)
+  limiar       Json
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, regraCodigo])
+  @@map("configuracao_regra")
+}
+
+model Notificacao {
+  id          String   @id @default(uuid())
+  usuarioId   String   @map("usuario_id")
+  regraCodigo String   @map("regra_codigo")
+  geradaEm    DateTime @default(now()) @map("gerada_em")
+  lida        Boolean  @default(false)
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@map("notificacao")
+}
+
+model RelatorioMensal {
+  id             String   @id @default(uuid())
+  usuarioId      String   @map("usuario_id")
+  mesReferencia  DateTime @map("mes_referencia") @db.Date
+  geradoEm       DateTime @default(now()) @map("gerado_em")
+
+  usuario Usuario @relation(fields: [usuarioId], references: [id], onDelete: Cascade)
+
+  @@unique([usuarioId, mesReferencia])
+  @@map("relatorio_mensal")
+}
