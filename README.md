@@ -28,6 +28,7 @@ O sistema **não** realiza diagnóstico, previsão clínica ou recomendação te
 | **[RFC — Documento do Projeto](docs/RFC.md)** | Documento principal: problema, benchmark, requisitos, arquitetura, segurança e planejamento |
 | **[Catálogo de Diagramas](docs/DIAGRAMAS.md)** | Os 9 diagramas do projeto reunidos, com descrição individual e registro de versões |
 | **[Pendências](docs/PENDENCIAS.md)** | O que ainda falta na documentação, organizado por prazo |
+| **[Infraestrutura](docs/INFRAESTRUTURA.md)** | Provisionamento do servidor, acesso e operações |
 
 ### Atalhos para as seções da RFC
 
